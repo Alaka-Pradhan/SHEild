@@ -2,7 +2,7 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, SafeAreaView, ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { ThemeContext } from '../app/_layout';
+import { ThemeContext } from '../contexts/ThemeContext';
 import { styles } from '../styles/SettingsScreenStyles';
 
 export default function SettingsScreen({ onLogout }) {

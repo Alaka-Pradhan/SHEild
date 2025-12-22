@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Dimensions, Linking, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { ThemeContext } from '../app/_layout';
+import { ThemeContext } from '../contexts/ThemeContext';
 import { Colors } from '../constants/Colors';
 
 const { width } = Dimensions.get('window');
