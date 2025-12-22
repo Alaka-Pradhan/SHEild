@@ -40,7 +40,7 @@ SHEild is a cross-platform mobile app built with React Native (Expo) to empower 
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone Alaka-Pradhan/SHEild
    cd SHEild
    ```
 2. **Install dependencies**
