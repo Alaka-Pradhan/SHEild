@@ -40,18 +40,28 @@ SHEild is a cross-platform mobile app built with React Native (Expo) to empower 
 
 1. **Clone the repository**
    ```bash
-   git clone Alaka-Pradhan/SHEild
+   git clone https://github.com/Alaka-Pradhan/SHEild.git
    cd SHEild
    ```
 2. **Install dependencies**
    ```bash
    npm install
    ```
-3. **Start the app**
+3. **Start the app (Expo)**
    ```bash
    npx expo start
    ```
-   - Use the Expo Go app, Android/iOS emulator, or web browser to preview.
+   - Use Expo Go, Android/iOS emulator, or the web preview to run.
+
+4. **Run tests**
+   ```bash
+   npm test
+   ```
+
+5. **Lint**
+   ```bash
+   npm run lint
+   ```
 
 ## 🗂 Project Structure
 
@@ -100,7 +110,10 @@ SHEild is a cross-platform mobile app built with React Native (Expo) to empower 
 - **React Native Safe Area Context** – Safe area management
 
 ## 📝 Contribution
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change. Please:
+- Branch off `main`
+- Run `npm test` before opening a PR
+- Keep commits small and focused
 
 ## 📄 License
 This project is for educational/demo purposes. Please contact the author for production/commercial use.
