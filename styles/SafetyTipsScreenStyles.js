@@ -1,0 +1,216 @@
+import { StyleSheet } from 'react-native';
+
+export const safetyTipsScreenStyles = StyleSheet.create({
+  bgImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+  },
+  container: {
+    padding: 16,
+    alignItems: 'stretch',
+    width: '100%',
+  },
+  toast: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    right: 20,
+    borderRadius: 16,
+    padding: 12,
+    zIndex: 10,
+    alignItems: 'center',
+  },
+  toastText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  headerSection: {
+    marginBottom: 24,
+  },
+  headerCard: {
+    borderRadius: 20,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  headerSubtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    opacity: 0.8,
+  },
+  contentSection: {
+    gap: 16,
+  },
+  categorySection: {
+    borderRadius: 16,
+    padding: 20,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    justifyContent: 'space-between',
+  },
+  categoryCard: {
+    width: '31%',
+    minWidth: 95,
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 2,
+    elevation: 2,
+    marginBottom: 8,
+  },
+  categoryCardLong: {
+    width: '100%',
+    height: 80,
+    borderRadius: 12,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    elevation: 2,
+    marginBottom: 8,
+  },
+  categoryIcon: {
+    fontSize: 24,
+    marginBottom: 8,
+  },
+  categoryName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  categoryCount: {
+    fontSize: 12,
+    opacity: 0.8,
+  },
+  currentCategoryCard: {
+    borderRadius: 16,
+    padding: 20,
+    elevation: 2,
+  },
+  currentCategoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  categoryBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  categoryBadgeText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  tipProgress: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  categoryDescription: {
+    fontSize: 15,
+    lineHeight: 22,
+    opacity: 0.8,
+  },
+  tipCard: {
+    borderRadius: 16,
+    padding: 20,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    borderLeftWidth: 4,
+  },
+  tipHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  tipLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
+  tipText: {
+    fontSize: 18,
+    lineHeight: 26,
+    marginBottom: 20,
+  },
+  tipFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  tipInstruction: {
+    fontSize: 14,
+    opacity: 0.7,
+  },
+  tipIndicators: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  tipIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  statsCard: {
+    borderRadius: 16,
+    padding: 20,
+    elevation: 2,
+    marginBottom: 20,
+  },
+  statsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    opacity: 0.8,
+  },
+});
