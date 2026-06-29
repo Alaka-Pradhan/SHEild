@@ -154,28 +154,28 @@ export default function ToolkitScreen() {
       if (alarmSound) {
         try {
           await alarmSound.playAsync();
-          setIsAlarmPlaying(true);
-          showToast('Loud alarm activated!', 'alarm');
-          
-          Alert.alert(
-            '🚨 ALARM ACTIVATED',
-            'Loud alarm is now playing!\n\nTap "Stop Alarm" to turn it off.',
-            [
-              { text: 'Stop Alarm', onPress: async () => {
-                if (alarmSound) {
-                  try {
+        setIsAlarmPlaying(true);
+        showToast('Loud alarm activated!', 'alarm');
+        
+        Alert.alert(
+          '🚨 ALARM ACTIVATED',
+          'Loud alarm is now playing!\n\nTap "Stop Alarm" to turn it off.',
+          [
+            { text: 'Stop Alarm', onPress: async () => {
+              if (alarmSound) {
+                try {
                     await alarmSound.stopAsync();
                     await alarmSound.setPositionAsync(0);
-                    setIsAlarmPlaying(false);
-                    showToast('Alarm stopped!', 'alarm');
-                  } catch (error) {
-                    showToast('Error stopping alarm', 'alarm');
-                  }
+                  setIsAlarmPlaying(false);
+                  showToast('Alarm stopped!', 'alarm');
+                } catch (error) {
+                  showToast('Error stopping alarm', 'alarm');
                 }
-              }},
-              { text: 'Keep Playing', style: 'cancel' }
-            ]
-          );
+              }
+            }},
+            { text: 'Keep Playing', style: 'cancel' }
+          ]
+        );
         } catch (error) {
           showToast('Error playing alarm', 'alarm');
         }
@@ -227,7 +227,7 @@ export default function ToolkitScreen() {
     if (alarmSound && !isAlarmPlaying) {
       try {
         await alarmSound.playAsync();
-        setIsAlarmPlaying(true);
+      setIsAlarmPlaying(true);
       } catch (error) {
         // Error playing alarm
       }
@@ -275,7 +275,7 @@ export default function ToolkitScreen() {
       showToast('Error getting location', 'resource');
     }
   };
-
+  
   const Gradient = ({ colors, style, children }) => (
     
     <View style={[style, { backgroundColor: colors[0] }]}>{children}</View>

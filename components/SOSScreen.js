@@ -8,18 +8,18 @@ import * as Notifications from 'expo-notifications';
 import * as SMS from 'expo-sms';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Alert,
-  Animated,
-  Dimensions,
-  Linking,
-  Pressable,
-  ScrollView,
-  Share,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Vibration,
-  View
+    Alert,
+    Animated,
+    Dimensions,
+    Linking,
+    Pressable,
+    ScrollView,
+    Share,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Vibration,
+    View
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 const SHAKE_THRESHOLD = 15;
