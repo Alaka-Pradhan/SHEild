@@ -1,17 +1,18 @@
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as AuthSession from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Animated, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { styles } from '../styles/RegistrationScreenStyles';
 
 WebBrowser.maybeCompleteAuthSession();
 
-const ANDROID_CLIENT_ID = 'YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com';
-const IOS_CLIENT_ID = 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com';
-const EXPO_CLIENT_ID = 'YOUR_EXPO_CLIENT_ID.apps.googleusercontent.com';
+// Replace these with your actual Google OAuth client IDs
+// See GOOGLE_SETUP_GUIDE.md for setup instructions
+const ANDROID_CLIENT_ID = process.env.ANDROID_CLIENT_ID || 'YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com';
+const IOS_CLIENT_ID = process.env.IOS_CLIENT_ID || 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com';
+const EXPO_CLIENT_ID = process.env.EXPO_CLIENT_ID || 'YOUR_EXPO_CLIENT_ID.apps.googleusercontent.com';
 
 export default function RegistrationScreen({ onRegister }) {
   const [name, setName] = useState('');
@@ -56,8 +57,18 @@ export default function RegistrationScreen({ onRegister }) {
           setSuccess(true);
           setTimeout(() => onRegister(), 1200);
         })
-        .catch(() => Alert.alert('Google sign-in failed'))
+        .catch((error) => {
+          console.error('Google sign-in error:', error);
+          Alert.alert('Google sign-in failed', 'Please check your Google OAuth configuration');
+        })
         .finally(() => setLoading(false));
+    } else if (response?.type === 'error') {
+      console.error('Auth error:', response);
+      Alert.alert(
+        'Google Authentication Not Configured',
+        'Google Sign-In requires proper OAuth setup. Please:\n\n1. Open GOOGLE_SETUP_GUIDE.md\n2. Follow the Google Authentication setup steps\n3. Update the client IDs in RegistrationScreen.js\n\nFor now, please use manual registration below.',
+        [{ text: 'OK' }]
+      );
     }
   }, [response]);
 
@@ -124,7 +135,7 @@ export default function RegistrationScreen({ onRegister }) {
           />
         </View>
         <View style={styles.inputRow}>
-          <Ionicons name="email" size={20} color="#7B3FA0" style={styles.inputIcon} />
+          <Ionicons name="mail" size={20} color="#7B3FA0" style={styles.inputIcon} />
           <TextInput
             style={styles.input}
             placeholder="Email"

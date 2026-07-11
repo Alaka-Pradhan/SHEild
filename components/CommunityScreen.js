@@ -2,7 +2,7 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import * as Location from 'expo-location';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, ImageBackground, Linking, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { communityScreenStyles as styles } from '../styles/CommunityScreenStyles';
 
@@ -218,7 +218,7 @@ export default function CommunityScreen() {
             <View style={styles.quickActionsRow}>
               <Pressable
                 style={[styles.quickActionButton, { backgroundColor: '#E91E63' }]}
-                onPress={() => navigation.navigate('SafetyTips', { category: 'community' })}
+                onPress={() => navigation.navigate('Toolkit')}
                 android_ripple={{ color: '#fff' }}
               >
                 <Ionicons name="bulb" size={24} color="#fff" />

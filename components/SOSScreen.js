@@ -1,12 +1,11 @@
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
-import { Audio } from 'expo-av';
-import * as Contacts from 'expo-contacts';
+import { Audio } from 'expo-audio';
+import * as Contacts from 'expo-contacts/legacy';
 import * as Haptics from 'expo-haptics';
 import * as Location from 'expo-location';
-import * as Notifications from 'expo-notifications';
 import * as SMS from 'expo-sms';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     Alert,
     Animated,
@@ -21,6 +20,7 @@ import {
     Vibration,
     View
 } from 'react-native';
+
 const { width, height } = Dimensions.get('window');
 const SHAKE_THRESHOLD = 15;
 const EMERGENCY_MESSAGE = "EMERGENCY! I need help! My location: ";
@@ -63,10 +63,9 @@ const SOSScreen = () => {
   }, [sound]);
   
   const loadSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require('../assets/sounds/alarm.mp3')
-    );
-    setSound(sound);
+    const audio = new Audio.Sound();
+    await audio.loadAsync(require('../assets/sounds/alarm.mp3'));
+    setSound(audio);
   };
   
   const playSound = async () => {
@@ -220,15 +219,12 @@ const SOSScreen = () => {
     Vibration.cancel();
     await stopSound();
     
-    // Schedule cancellation notification
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Emergency Cancelled",
-        body: "The emergency alert has been cancelled.",
-        data: { data: 'emergency_cancelled' },
-      },
-      trigger: null,
-    });
+    // Show alert instead of notification
+    Alert.alert(
+      'Emergency Cancelled',
+      'The emergency alert has been cancelled.',
+      [{ text: 'OK' }]
+    );
   };
   
   const toggleFlashlight = async () => {

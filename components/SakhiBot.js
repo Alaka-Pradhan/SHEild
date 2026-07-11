@@ -1,5 +1,5 @@
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -66,8 +66,9 @@ const QUICK_REPLIES = {
   ]
 };
 
-const SakhiBot = ({ navigation }) => {
+const SakhiBot = () => {
   const { colors } = useTheme();
+  const navigation = useNavigation();
   const [messages, setMessages] = useState([
     { id: '1', text: MESSAGES.welcome, sender: 'bot' }
   ]);
@@ -298,7 +299,7 @@ const SakhiBot = ({ navigation }) => {
           <SafeAreaView>
             <View style={styles.headerContent}>
               <TouchableOpacity 
-                onPress={() => navigation.goBack()}
+                onPress={() => navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Home')}
                 style={styles.backButton}
                 activeOpacity={0.7}
               >

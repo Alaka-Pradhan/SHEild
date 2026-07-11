@@ -1,14 +1,13 @@
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useTheme } from '@react-navigation/native';
-import { Audio } from 'expo-av';
+import { Audio } from 'expo-audio';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import * as Location from 'expo-location';
 import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Dimensions, Image, ImageBackground, Linking, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
 import { homeScreenStyles as baseStyles } from '../styles/HomeScreenStyles';
 
 const styles = {
@@ -100,6 +99,7 @@ export default function HomeScreen() {
   const [streakDays, setStreakDays] = useState(7);
   const [isLocationPulse, setIsLocationPulse] = useState(false);
   const [quickActionsExpanded, setQuickActionsExpanded] = useState(false);
+  const [locationError, setLocationError] = useState(null);
   
   
   // Handle map ready event
@@ -121,46 +121,62 @@ export default function HomeScreen() {
     }
   };
 
-  // Render map preview
+  // Render location preview (simplified without map tiles)
   const renderMap = () => {
-    if (!currentCoords) return null;
+    if (!currentCoords) {
+      return (
+        <View style={styles.mapContainer}>
+          <View style={styles.mapLoading}>
+            <ActivityIndicator size="large" color="#7B3FA0" />
+            <Text style={styles.mapLoadingText}>Getting your location...</Text>
+          </View>
+        </View>
+      );
+    }
+    
+    if (locationError) {
+      return (
+        <View style={styles.mapContainer}>
+          <View style={styles.mapError}>
+            <Ionicons name="location-outline" size={48} color="#B00020" />
+            <Text style={styles.mapErrorText}>Location unavailable</Text>
+            <Text style={[styles.mapErrorText, { fontSize: 12, marginTop: 8, color: '#666' }]}>
+              {locationError}
+            </Text>
+            <TouchableOpacity
+              style={{ marginTop: 16, padding: 12, backgroundColor: '#7B3FA0', borderRadius: 8 }}
+              onPress={requestLocationPermission}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
     
     const { latitude, longitude } = currentCoords;
-    const region = {
-      latitude,
-      longitude,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01 * (Dimensions.get('window').width / Dimensions.get('window').height),
-    };
     
     return (
       <View style={styles.mapContainer}>
-        <MapView
-          style={styles.map}
-          initialRegion={region}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          showsCompass={true}
-          zoomEnabled={true}
-          scrollEnabled={true}
-          rotateEnabled={true}
-        >
-          <Marker
-            coordinate={{
-              latitude: latitude,
-              longitude: longitude,
-            }}
-            title="Your Location"
-            description="You are here"
-          />
-        </MapView>
+        <View style={styles.locationPreview}>
+          <Ionicons name="location" size={64} color="#7B3FA0" />
+          <Text style={[styles.locationText, { color: colors.text, marginTop: 12 }]}>
+            Your Location
+          </Text>
+          <Text style={[styles.coordinatesText, { color: colors.text, marginTop: 8 }]}>
+            {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
+          </Text>
+          {currentAddress && (
+            <Text style={[styles.addressText, { color: colors.text, marginTop: 8 }]}>
+              {currentAddress}
+            </Text>
+          )}
+        </View>
         <Pressable 
           onPress={openMap} 
           style={styles.mapButton}
         >
-          <Text style={[styles.coordinatesText, { color: colors.text }]}>
-            {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
-          </Text>
+          <Ionicons name="map" size={20} color={colors.primary} style={{ marginRight: 8 }} />
           <Text style={[styles.mapButtonText, { color: colors.primary }]}>
             Open in Google Maps
           </Text>
@@ -306,11 +322,10 @@ export default function HomeScreen() {
 
   const loadAlarmSound = async () => {
     try {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../assets/sounds/alarm.mp3')
-      );
-      await sound.setIsLoopingAsync(true);
-      setAlarmSound(sound);
+      const audio = new Audio.Sound();
+      await audio.loadAsync(require('../assets/sounds/alarm.mp3'));
+      await audio.setIsLoopingAsync(true);
+      setAlarmSound(audio);
     } catch (error) {
       // Error loading alarm sound
     }
@@ -830,7 +845,7 @@ export default function HomeScreen() {
               
               <Pressable 
                 style={[styles.quickActionGridItemLong, { backgroundColor: '#9C27B0' }]} 
-                onPress={() => animateButtonPress(() => navigation.navigate('Toolkit', { screen: 'SafetyTips' }))}
+                onPress={() => animateButtonPress(() => navigation.navigate('Toolkit'))}
                 android_ripple={{ color: '#fff' }}
               >
                 <Ionicons name="bulb" size={28} color="#fff" />

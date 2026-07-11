@@ -159,10 +159,42 @@ export const homeScreenStyles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 1,
-    borderRadius: 12,
+  locationPreview: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  locationText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  addressText: {
+    fontSize: 14,
+    textAlign: 'center',
+    opacity: 0.7,
+  },
+  mapLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mapLoadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#666',
+  },
+  mapError: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  mapErrorText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#B00020',
+    textAlign: 'center',
   },
   mapDebug: {
     position: 'absolute',

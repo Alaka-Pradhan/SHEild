@@ -1,7 +1,7 @@
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, SafeAreaView, ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { Alert, SafeAreaView, ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { styles } from '../styles/SettingsScreenStyles';
 
@@ -12,8 +12,7 @@ export default function SettingsScreen({ onLogout }) {
   const [newContact, setNewContact] = useState('');
   const [locationSharing, setLocationSharing] = useState(true);
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
-  const { darkMode: appDarkMode, setDarkMode: setAppDarkMode } = useContext(ThemeContext);
+  const { darkMode, setDarkMode: setAppDarkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     const loadData = async () => {
@@ -26,7 +25,9 @@ export default function SettingsScreen({ onLogout }) {
       const notif = await AsyncStorage.getItem('notifications');
       if (notif !== null) setNotifications(notif === 'true');
       const theme = await AsyncStorage.getItem('darkMode');
-      if (theme !== null) setDarkMode(theme === 'true');
+      if (theme !== null) {
+        setAppDarkMode(theme === 'true');
+      }
     };
     loadData();
   }, []);
@@ -66,8 +67,9 @@ export default function SettingsScreen({ onLogout }) {
   };
 
   const toggleDarkMode = async () => {
-    setDarkMode(!darkMode);
-    await AsyncStorage.setItem('darkMode', (!darkMode).toString());
+    const newValue = !darkMode;
+    setAppDarkMode(newValue);
+    await AsyncStorage.setItem('darkMode', newValue.toString());
   };
 
   const handleLogout = () => {
@@ -121,20 +123,19 @@ export default function SettingsScreen({ onLogout }) {
         </View>
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Emergency Contacts</Text>
-          <FlatList
-            data={contacts}
-            keyExtractor={(_, i) => i.toString()}
-            renderItem={({ item, index }) => (
-              <View style={styles.contactRow}>
+          {contacts.length === 0 ? (
+            <Text style={{ color: '#aaa', marginBottom: 8 }}>No contacts added.</Text>
+          ) : (
+            contacts.map((contact, index) => (
+              <View key={index} style={styles.contactRow}>
                 <FontAwesome name="user" size={20} color="#7B3FA0" style={{ marginRight: 8 }} />
-                <Text style={styles.contactText}>{item}</Text>
+                <Text style={styles.contactText}>{contact}</Text>
                 <TouchableOpacity onPress={() => removeContact(index)}>
                   <Ionicons name="trash" size={20} color="#B00020" />
                 </TouchableOpacity>
               </View>
-            )}
-            ListEmptyComponent={<Text style={{ color: '#aaa', marginBottom: 8 }}>No contacts added.</Text>}
-          />
+            ))
+          )}
           <View style={styles.addContactRow}>
             <TextInput
               style={styles.addContactInput}

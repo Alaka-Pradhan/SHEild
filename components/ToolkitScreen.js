@@ -1,15 +1,16 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { Audio } from 'expo-av';
+import { Audio } from 'expo-audio';
+import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Dimensions, Linking, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { ThemeContext } from '../contexts/ThemeContext';
 import { Colors } from '../constants/Colors';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
@@ -38,38 +39,7 @@ const accentGradients = {
 
 const GRADIENT_COLORS = ['#f8f9fa', '#ffffff'];
 
-const EMERGENCY_SMS_NUMBER = 'xxxxxxxxxx'; 
-
-const sendEmergencySMS = async () => {
-  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-  let location = null;
-  try {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status === 'granted') {
-      location = await Location.getCurrentPositionAsync({});
-    }
-  } catch {}
-  let message = 'Emergency! I need help. My location: ';
-  if (location) {
-    message += `https://maps.google.com/?q=${location.coords.latitude},${location.coords.longitude}`;
-  } else {
-    message += 'Location unavailable.';
-  }
-  showToast('Emergency SMS sent!', 'call');
-  Alert.alert('Emergency SMS', `Pretend to send SMS to ${EMERGENCY_SMS_NUMBER}:\n${message}`);
-};
-
-const openEvidenceCamera = async () => {
-  Haptics.selectionAsync();
-  let result = await ImagePicker.launchCameraAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    quality: 0.7,
-  });
-  if (!result.cancelled) {
-    showToast('Photo captured!', 'resource');
-    Alert.alert('Photo', 'Photo captured for evidence.');
-  }
-};
+const EMERGENCY_SMS_NUMBER = '100';
 
 export default function ToolkitScreen() {
   const navigation = useNavigation();
@@ -100,6 +70,42 @@ export default function ToolkitScreen() {
     }, 1200);
   };
 
+  const sendEmergencySMS = async () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    let location = null;
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        location = await Location.getCurrentPositionAsync({});
+      }
+    } catch {}
+    let message = 'Emergency! I need help. My location: ';
+    if (location) {
+      message += `https://maps.google.com/?q=${location.coords.latitude},${location.coords.longitude}`;
+    } else {
+      message += 'Location unavailable.';
+    }
+    showToast('Emergency SMS sent!', 'call');
+    Alert.alert('Emergency SMS', `Pretend to send SMS to ${EMERGENCY_SMS_NUMBER}:\n${message}`);
+  };
+
+  const openEvidenceCamera = async () => {
+    Haptics.selectionAsync();
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (permission.status !== 'granted') {
+      showToast('Camera permission denied', 'resource');
+      return;
+    }
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ['images'],
+      quality: 0.7,
+    });
+    if (!result.canceled && result.assets?.length > 0) {
+      showToast('Photo captured!', 'resource');
+      Alert.alert('Photo', 'Photo captured for evidence.');
+    }
+  };
+
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
@@ -120,11 +126,10 @@ export default function ToolkitScreen() {
 
   const loadAlarmSound = async () => {
     try {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../assets/sounds/alarm.mp3')
-      );
-      await sound.setIsLoopingAsync(true);
-      setAlarmSound(sound);
+      const audio = new Audio.Sound();
+      await audio.loadAsync(require('../assets/sounds/alarm.mp3'));
+      await audio.setIsLoopingAsync(true);
+      setAlarmSound(audio);
     } catch (error) {
       // Error loading alarm sound
     }

@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useTheme } from '@react-navigation/native';
 import * as Contacts from 'expo-contacts';
 import * as Location from 'expo-location';
 import React, { useEffect, useState } from 'react';
@@ -15,16 +16,11 @@ import ToolkitScreen from '../components/ToolkitScreen';
 import SOSScreen from '../components/SOSScreen';
 import SakhiBot from '../components/SakhiBot';
 
-// SOSScreen component is now imported from components directory
-function ChatbotScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    </View>
-  );
-}
-function ToolkitScreenInner() {
-  return <ToolkitScreen />;
-}
+const stackScreenOptions = {
+  headerStyle: { backgroundColor: '#7B3FA0' },
+  headerTintColor: '#fff',
+  headerTitleAlign: 'center',
+};
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -74,7 +70,7 @@ function ChatbotStackScreen() {
 function ToolkitStackScreen() {
   return (
     <ToolkitStack.Navigator screenOptions={stackScreenOptions}>
-      <ToolkitStack.Screen name="ToolkitMain" component={ToolkitScreenInner} options={{ headerShown: false }} />
+      <ToolkitStack.Screen name="ToolkitMain" component={ToolkitScreen} options={{ headerShown: false }} />
       <ToolkitStack.Screen name="SafetyTips" component={SafetyTipsScreen} options={{ title: 'Safety Tips' }} />
       <ToolkitStack.Screen name="Community" component={CommunityScreen} options={{ title: 'Community Safety Hub' }} />
     </ToolkitStack.Navigator>
@@ -90,13 +86,8 @@ function SettingsStackScreen({ onLogout }) {
   );
 }
 
-const stackScreenOptions = {
-  headerStyle: { backgroundColor: '#7B3FA0' },
-  headerTintColor: '#fff',
-  headerTitleAlign: 'center',
-};
-
 export default function MainNavigator() {
+  const { colors } = useTheme();
   const [isRegistered, setIsRegistered] = useState(null);
   const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
@@ -175,6 +166,9 @@ export default function MainNavigator() {
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: '#999',
+        tabBarStyle: { backgroundColor: colors.card },
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name === 'Home') iconName = 'home';
